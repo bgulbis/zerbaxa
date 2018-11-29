@@ -4,22 +4,13 @@ library(openxlsx)
 
 dir_raw <- "data/raw"
 
-# run MBO query
-#   * Patients - by Medication (Generic) - Administration Date
-#       - Medication (Generic): ceftolazone-tazobactam
+# MBO folder: Clinician Projects/Zerbaxa
 
-pts <- read_data(dir_raw, "patients", FALSE) %>%
-    as.patients()
+# patients ---------------------------------------------
 
-mbo_id <- concat_encounters(pts$millennium.id)
-print(mbo_id)
+pts <- read_data2(dir_raw, "patients", FALSE)  %>%
+    select(-millennium.id)
 
-# run MBO query
-#   * Identifiers - by Millennium Encounter Id
+write.xlsx(pts, "data/external/zerbaxa_list_2015-01_2018-10.xlsx")
 
-id <- read_data(dir_raw, "identifiers", FALSE) %>%
-    as.id()
-
-pts_list <- select(id, fin)
-
-write.xlsx(pts_list, "data/external/zerbaxa_list_2015-01_2018-10.xlsx")
+dirr::gzip_files()
